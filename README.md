@@ -1,5 +1,9 @@
 # 🚀 Scaffold CLI
 
+[![npm version](https://img.shields.io/npm/v/@pankajkumardev/project-scaffold-cli.svg)](https://www.npmjs.com/package/@pankajkumardev/project-scaffold-cli)
+[![npm downloads](https://img.shields.io/npm/dm/@pankajkumardev/project-scaffold-cli.svg)](https://www.npmjs.com/package/@pankajkumardev/project-scaffold-cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A powerful, interactive command-line tool to scaffold modern web and backend projects with zero configuration. Create production-ready projects with your preferred tech stack in seconds!
 
 ## ✨ Features
@@ -29,20 +33,47 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 
 ## 🛠️ Installation
 
-### Clone the repository
+### Quick Start (Recommended)
+
+Use npx to run without installation:
 
 ```bash
-git clone https://github.com/pankajktech/project-scaffold-cli.git
-cd project-scaffold-cli
+npx @pankajkumardev/project-scaffold-cli
 ```
 
-### Install dependencies
+### Global Installation
+
+Install once, use anywhere:
 
 ```bash
+npm install -g @pankajkumardev/project-scaffold-cli
+```
+
+Then run with:
+
+```bash
+scaffold
+# or
+project-scaffold
+```
+
+### Local Installation (for development)
+
+Clone the repository:
+
+```bash
+git clone https://github.com/PankajKumardev/scaffold-cli.git
+cd scaffold-cli
 npm install
 ```
 
-### Make it globally available (optional)
+Run locally:
+
+```bash
+node index.js
+```
+
+Link globally (optional):
 
 ```bash
 npm link
@@ -322,7 +353,7 @@ MIT License - feel free to use this for personal or commercial projects!
 **Pankaj Kumar**
 
 - Website: [www.pankajk.tech](https://www.pankajk.tech)
-- GitHub: [@pankajktech](https://github.com/pankajktech)
+- GitHub: [@PankajKumardev](https://github.com/PankajKumardev)
 
 ## 🙏 Acknowledgments
 
