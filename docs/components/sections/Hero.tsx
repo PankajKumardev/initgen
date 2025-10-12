@@ -9,10 +9,10 @@ export default function Hero() {
           InitGen CLI
         </h1>
         <div className="space-y-4">
-          <p className="mx-auto max-w-2xl text-2xl font-semibold text-foreground sm:text-3xl text-gray-800">
+          <p className="mx-auto max-w-2xl text-2xl font-semibold text-gray-800 sm:text-3xl">
             Ship production-ready starters faster.
           </p>
-          <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg text-gray-700">
+          <p className="mx-auto max-w-2xl text-base text-gray-700 sm:text-lg">
             InitGen scaffolds React, Next.js, Vue, Node.js Express, and Python
             starters with interactive prompts. It installs dependencies when
             possible, writes the README, and leaves you with a clean repository

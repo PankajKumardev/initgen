@@ -162,10 +162,8 @@ export default function DownloadsSection() {
             </div>
             <div className="flex flex-wrap gap-6 text-sm">
               <div className="text-left">
-                <span className="block text-muted-foreground text-gray-800">
-                  This week
-                </span>
-                <span className="text-lg font-semibold text-foreground  text-gray-800">
+                <span className="block text-gray-800">This week</span>
+                <span className="text-lg font-semibold text-gray-800">
                   {downloadSummary.weekly}
                 </span>
               </div>
@@ -173,7 +171,7 @@ export default function DownloadsSection() {
                 <span className="block text-muted-foreground  text-gray-800">
                   Rolling 30 days
                 </span>
-                <span className="text-lg font-semibold text-foreground  text-gray-800">
+                <span className="text-lg font-semibold text-gray-800">
                   {downloadSummary.monthly}
                 </span>
               </div>

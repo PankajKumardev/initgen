@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-border bg-background py-10">
       <div className="container flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
-        <span className="font-medium text-foreground text-gray-800">
+        <span className="font-medium text-gray-800">
           InitGen CLI by{' '}
           <Link
             className="transition-colors hover:text-blue-500"
