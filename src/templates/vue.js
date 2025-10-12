@@ -57,7 +57,7 @@ import { ref } from 'vue'
 
     <footer class="footer">
       <p>
-        Scaffolded CLI by 
+        InitGen CLI by 
         <a 
           href="https://www.pankajk.tech" 
           target="_blank" 

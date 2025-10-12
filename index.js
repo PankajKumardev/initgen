@@ -33,11 +33,13 @@ async function showTitle() {
   const rainbowTitle = chalkAnimation.rainbow('Project Structure Generator 🚀');
   await new Promise((r) => setTimeout(r, 1000));
   rainbowTitle.stop();
-  console.log(gradient.pastel.multiline(figlet.textSync('Scaffold CLI')));
+  console.log(
+    gradient.pastel.multiline(figlet.textSync('InitGen', { font: 'Standard' }))
+  );
 }
 
 async function mainMenu() {
-  console.log(chalk.bgBlueBright('\nWelcome to the Project Scaffold CLI!\n'));
+  console.log(chalk.bgBlueBright('\nWelcome to InitGen CLI!\n'));
 
   const answers = await inquirer.prompt([
     {

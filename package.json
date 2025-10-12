@@ -1,6 +1,6 @@
 {
   "name": "initgen",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "A beautiful, interactive CLI tool to scaffold modern web and backend projects with React, Next.js, Vue, Node.js, Python Flask/Django and more. Zero configuration, production-ready projects in seconds!",
   "main": "index.js",
   "type": "module",
@@ -12,6 +12,7 @@
   },
   "keywords": [
     "cli",
+    "initgen",
     "scaffold",
     "generator",
     "react",
@@ -37,12 +38,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PankajKumardev/scaffold-cli.git"
+    "url": "git+https://github.com/PankajKumardev/initgen.git"
   },
   "bugs": {
-    "url": "https://github.com/PankajKumardev/scaffold-cli/issues"
+    "url": "https://github.com/PankajKumardev/initgen/issues"
   },
-  "homepage": "https://github.com/PankajKumardev/scaffold-cli#readme",
+  "homepage": "https://github.com/PankajKumardev/initgen#readme",
   "engines": {
     "node": ">=14.0.0"
   },

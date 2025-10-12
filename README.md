@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/initgen.svg)](https://www.npmjs.com/package/initgen)
 [![npm downloads](https://img.shields.io/npm/dm/initgen.svg)](https://www.npmjs.com/package/initgen)
-[![GitHub stars](https://img.shields.io/github/stars/PankajKumardev/scaffold-cli?style=social)](https://github.com/PankajKumardev/scaffold-cli)
+[![GitHub stars](https://img.shields.io/github/stars/PankajKumardev/initgen?style=social)](https://github.com/PankajKumardev/initgen)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A powerful, interactive command-line tool to scaffold modern web and backend projects with zero configuration. Create production-ready projects with your preferred tech stack in seconds!
@@ -61,8 +61,8 @@ initgen
 Clone the repository:
 
 ```bash
-git clone https://github.com/PankajKumardev/scaffold-cli.git
-cd scaffold-cli
+git clone https://github.com/PankajKumardev/initgen.git
+cd initgen
 npm install
 ```
 

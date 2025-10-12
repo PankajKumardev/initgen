@@ -1,7 +1,7 @@
 export function createReadme(projectName, stackName) {
   return `# ${projectName}
 
-A ${stackName} project scaffolded with Scaffold CLI.
+A ${stackName} project scaffolded with InitGen CLI.
 
 ## Getting Started
 
@@ -34,11 +34,11 @@ ${projectName}/
 ## Learn More
 
 - Documentation for ${stackName}
-- [Scaffold CLI](https://github.com/your-repo)
+- [InitGen CLI](https://github.com/PankajKumardev/initgen)
 
 ---
 
-*Scaffolded by Scaffold CLI*
+*Scaffolded by InitGen CLI*
 `;
 }
 
@@ -55,7 +55,7 @@ export function createPythonReadme(projectName, stackName, isFlask = false) {
 
   return `# ${projectName}
 
-A ${stackName} project scaffolded with Scaffold CLI.
+A ${stackName} project scaffolded with InitGen CLI.
 
 ## Getting Started
 
@@ -87,10 +87,10 @@ ${projectName}/
 ## Learn More
 
 - Documentation for ${stackName}
-- [Scaffold CLI](https://github.com/your-repo)
+- [InitGen CLI](https://github.com/PankajKumardev/initgen)
 
 ---
 
-*Scaffolded by Scaffold CLI*
+*Scaffolded by InitGen CLI*
 `;
 }
