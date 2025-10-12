@@ -1,7 +1,8 @@
-# 🚀 Scaffold CLI
+# 🚀 InitGen
 
-[![npm version](https://img.shields.io/npm/v/@pankajkumardev/project-scaffold-cli.svg)](https://www.npmjs.com/package/@pankajkumardev/project-scaffold-cli)
-[![npm downloads](https://img.shields.io/npm/dm/@pankajkumardev/project-scaffold-cli.svg)](https://www.npmjs.com/package/@pankajkumardev/project-scaffold-cli)
+[![npm version](https://img.shields.io/npm/v/initgen.svg)](https://www.npmjs.com/package/initgen)
+[![npm downloads](https://img.shields.io/npm/dm/initgen.svg)](https://www.npmjs.com/package/initgen)
+[![GitHub stars](https://img.shields.io/github/stars/PankajKumardev/scaffold-cli?style=social)](https://github.com/PankajKumardev/scaffold-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A powerful, interactive command-line tool to scaffold modern web and backend projects with zero configuration. Create production-ready projects with your preferred tech stack in seconds!
@@ -38,7 +39,7 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 Use npx to run without installation:
 
 ```bash
-npx @pankajkumardev/project-scaffold-cli
+npx initgen
 ```
 
 ### Global Installation
@@ -46,15 +47,13 @@ npx @pankajkumardev/project-scaffold-cli
 Install once, use anywhere:
 
 ```bash
-npm install -g @pankajkumardev/project-scaffold-cli
+npm install -g initgen
 ```
 
 Then run with:
 
 ```bash
-scaffold
-# or
-project-scaffold
+initgen
 ```
 
 ### Local Installation (for development)
@@ -90,7 +89,7 @@ node index.js
 Or if you've linked it globally:
 
 ```bash
-scaffold-cli
+initgen
 ```
 
 ### Interactive Prompts
@@ -103,16 +102,16 @@ scaffold-cli
 ### Example
 
 ```bash
-$ node index.js
+$ initgen
 
 Project Structure Generator 🚀
-  ____             __  __       _     _    ____ _     ___
- / ___|  ___ __ _ / _|/ _| ___ | | __| |  / ___| |   |_ _|
- \___ \ / __/ _` | |_| |_ / _ \| |/ _` | | |   | |    | |
-  ___) | (_| (_| |  _|  _| (_) | | (_| | | |___| |___ | |
- |____/ \___\__,_|_| |_|  \___/|_|\__,_|  \____|_____|___|
+  ___       _ _    ____
+ |_ _|_ __ (_) |_ / ___| ___ _ __
+  | || '_ \| | __| |  _ / _ \ '_ \
+  | || | | | | |_| |_| |  __/ | | |
+ |___|_| |_|_|\__|\____|\___|_| |_|
 
-Welcome to the Project Scaffold CLI!
+Welcome to InitGen CLI!
 
 ? Choose your tech stack: React (Vite)
 ? Project name: my-app
@@ -387,6 +386,6 @@ Give a ⭐️ if this project helped you!
 
 ---
 
-**Made by Pankaj Kumar**
+**Made with ❤️ by Pankaj Kumar**
 
-_Scaffolded CLI - Create projects at lightning speed!_
+_InitGen - Create projects at lightning speed!_

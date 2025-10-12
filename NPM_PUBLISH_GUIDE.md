@@ -31,25 +31,17 @@ npm whoami
 
 ## 📝 Step 2: Check Package Name Availability
 
-The package is scoped to your username: `@pankajkumardev/project-scaffold-cli`
+The package name is: `createx`
 
 Check if it's available:
 
 ```bash
-npm search @pankajkumardev/project-scaffold-cli
+npm search createx
 ```
 
-Or check on: https://www.npmjs.com/package/@pankajkumardev/project-scaffold-cli
+Or check on: https://www.npmjs.com/package/createx
 
-### Alternative: Use unscoped name
-
-If you want an unscoped package, change in package.json:
-
-```json
-"name": "project-scaffold-cli"
-```
-
-⚠️ Note: Unscoped names are more likely to be taken!
+✅ **Good news:** `createx` is available and ready to use!
 
 ## 🧪 Step 3: Test Locally
 
@@ -66,10 +58,10 @@ node index.js
 npm link
 
 # Test the global command
-scaffold
+initgen
 
 # Unlink when done testing
-npm unlink -g @pankajkumardev/project-scaffold-cli
+npm unlink -g initgen
 ```
 
 ## 🚀 Step 4: Publish to npm
@@ -80,13 +72,7 @@ npm unlink -g @pankajkumardev/project-scaffold-cli
 npm publish --dry-run
 ```
 
-### Publish (scoped package - public):
-
-```bash
-npm publish --access public
-```
-
-### If you're using unscoped name:
+### Publish:
 
 ```bash
 npm publish
@@ -94,16 +80,16 @@ npm publish
 
 ## ✅ Step 5: Verify Publication
 
-1. Check on npm: https://www.npmjs.com/package/@pankajkumardev/project-scaffold-cli
+1. Check on npm: https://www.npmjs.com/package/createx
 2. Wait 2-5 minutes for indexing
 3. Test installation:
 
 ```bash
 # Install globally
-npm install -g @pankajkumardev/project-scaffold-cli
+npm install -g createx
 
 # Or use npx (no installation needed)
-npx @pankajkumardev/project-scaffold-cli
+npx createx
 ```
 
 ## 🔄 Step 6: Updating Your Package
@@ -135,14 +121,13 @@ After publishing, users can install your CLI:
 
 ```bash
 # Install globally
-npm install -g @pankajkumardev/project-scaffold-cli
+npm install -g initgen
 
 # Run with npx (no installation)
-npx @pankajkumardev/project-scaffold-cli
+npx initgen
 
-# Or use the short commands
-scaffold
-project-scaffold
+# Or use the command
+initgen
 ```
 
 ## 🎯 Important Notes
@@ -153,6 +138,9 @@ project-scaffold
    - Require `--access public` flag when publishing
 
 2. **Version Numbers**: Follow semantic versioning
+
+   - MAJOR.MINOR.PATCH (e.g., 1.0.0)
+   - Can't publish the same version twice
 
    - MAJOR.MINOR.PATCH (e.g., 1.0.0)
    - Can't publish the same version twice
@@ -196,11 +184,11 @@ project-scaffold
 2. Add npm badge to README:
 
    ```markdown
-   ![npm version](https://img.shields.io/npm/v/@pankajkumardev/project-scaffold-cli.svg)
-   ![npm downloads](https://img.shields.io/npm/dm/@pankajkumardev/project-scaffold-cli.svg)
+   ![npm version](https://img.shields.io/npm/v/createx.svg)
+   ![npm downloads](https://img.shields.io/npm/dm/createx.svg)
    ```
 
-3. Track downloads: https://npm-stat.com/charts.html?package=@pankajkumardev/project-scaffold-cli
+3. Track downloads: https://npm-stat.com/charts.html?package=createx
 
 4. Monitor issues on GitHub
 
@@ -219,16 +207,16 @@ npm link
 npm publish --dry-run
 
 # Publish
-npm publish --access public
+npm publish
 
 # Update version
 npm version patch
 
 # View package info
-npm info @pankajkumardev/project-scaffold-cli
+npm info createx
 
 # Unpublish (within 72 hours)
-npm unpublish @pankajkumardev/project-scaffold-cli@1.0.0
+npm unpublish createx@1.0.0
 ```
 
 ---
@@ -237,7 +225,7 @@ npm unpublish @pankajkumardev/project-scaffold-cli@1.0.0
 
 ```bash
 npm login
-npm publish --access public
+npm publish
 ```
 
 🎉 **That's it! Your CLI will be live on npm!**
