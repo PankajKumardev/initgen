@@ -20,7 +20,7 @@ const quickStart = [
 
 export default function QuickStartSection() {
   return (
-    <section className="border-t border-border bg-background">
+    <section className="bg-background">
       <div className="container grid gap-10 py-16">
         <div className="mx-auto max-w-2xl space-y-3 text-center">
           <h2 className="text-2xl font-semibold text-gray-800">Quick start</h2>

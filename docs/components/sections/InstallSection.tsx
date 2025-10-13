@@ -69,7 +69,7 @@ function CopyButton({
 
 export default function InstallSection() {
   return (
-    <section className="border-t border-border bg-card/50">
+    <section className="bg-card/50">
       <div className="container grid gap-10 py-16">
         <div className="mx-auto max-w-2xl space-y-3 text-center">
           <h2 className="text-2xl font-semibold  text-gray-800">Install</h2>

@@ -10,13 +10,13 @@ export default function Hero() {
         </h1>
         <div className="space-y-4">
           <p className="mx-auto max-w-2xl text-2xl font-semibold text-gray-800 sm:text-3xl">
-            Ship production-ready starters faster.
+            Generate project starters with zero setup.
           </p>
           <p className="mx-auto max-w-2xl text-base text-gray-700 sm:text-lg">
-            InitGen scaffolds React, Next.js, Vue, Node.js Express, and Python
-            starters with interactive prompts. It installs dependencies when
-            possible, writes the README, and leaves you with a clean repository
-            ready for your first commit.
+            InitGen lets you scaffold ready-to-code projects for React, Next.js,
+            Vue, Express, and Python all through one interactive CLI. It
+            installs dependencies, sets up structure, and leaves you with a
+            clean repo ready to push.
           </p>
         </div>
       </div>

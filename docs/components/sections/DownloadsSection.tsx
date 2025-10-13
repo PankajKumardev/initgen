@@ -8,10 +8,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from 'recharts';
 
 type DataPoint = {
-  label: string;
-  value: number;
+  day: string;
+  downloads: number;
+  date: string;
 };
 
 type DownloadSummary = {
@@ -19,210 +31,247 @@ type DownloadSummary = {
   monthly: string;
 };
 
-function formatCount(value: number) {
-  return new Intl.NumberFormat('en-US', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(value);
-}
+type DownloadStatus = 'loading' | 'success' | 'error';
 
-function buildLinePath(data: DataPoint[]) {
-  if (data.length === 0) {
-    return '';
+// Custom tooltip component for better styling
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{ value: number }>;
+  label?: string;
+}) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+        <p className="text-sm font-medium text-gray-900">
+          {label
+            ? new Date(label).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })
+            : ''}
+        </p>
+        <p className="text-sm text-blue-600">
+          Downloads:{' '}
+          <span className="font-semibold">
+            {payload[0].value.toLocaleString()}
+          </span>
+        </p>
+      </div>
+    );
   }
-
-  const max = Math.max(...data.map((d) => d.value));
-  const min = Math.min(...data.map((d) => d.value));
-  const range = Math.max(max - min, 1);
-
-  return data
-    .map((point, index) => {
-      const x = (index / Math.max(data.length - 1, 1)) * 100;
-      const y = 100 - ((point.value - min) / range) * 80 - 10;
-      return `${index === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`;
-    })
-    .join(' ');
-}
-
-function buildAreaPath(data: DataPoint[]) {
-  if (data.length === 0) {
-    return '';
-  }
-
-  const line = buildLinePath(data).replace(/^M\s?/, '');
-  const points = line.split(' L ');
-  if (points.length === 0) {
-    return '';
-  }
-
-  const firstPoint = points[0]?.split(' ') ?? ['0', '90'];
-  const lastPoint = points[points.length - 1]?.split(' ') ?? ['100', '90'];
-
-  const areaPoints = [
-    `M ${firstPoint[0]} 90`,
-    ...points.map((pt) => `L ${pt}`),
-    `L ${lastPoint[0]} 90`,
-    'Z',
-  ];
-
-  return areaPoints.join(' ');
-}
+  return null;
+};
 
 export default function DownloadsSection() {
   const [downloadTrend, setDownloadTrend] = useState<DataPoint[]>([]);
-  const [downloadSummary, setDownloadSummary] = useState<DownloadSummary>(
-    () => ({ weekly: '0', monthly: '0' })
-  );
-  const [downloadStatus, setDownloadStatus] = useState<
-    'loading' | 'ready' | 'empty' | 'error'
-  >('loading');
+  const [downloadSummary, setDownloadSummary] = useState<DownloadSummary>({
+    weekly: '0',
+    monthly: '0',
+  });
+  const [downloadStatus, setDownloadStatus] =
+    useState<DownloadStatus>('loading');
 
   useEffect(() => {
-    async function loadDownloads() {
+    const fetchDownloadData = async () => {
       try {
-        const [weeklyRes, monthlyRes] = await Promise.all([
-          fetch('https://api.npmjs.org/downloads/range/last-week/initgen'),
-          fetch('https://api.npmjs.org/downloads/point/last-month/initgen'),
-        ]);
+        setDownloadStatus('loading');
 
-        if (!weeklyRes.ok || !monthlyRes.ok) {
-          throw new Error('Failed to fetch npm downloads');
+        const response = await fetch(
+          'https://api.npmjs.org/downloads/range/last-month/initgen'
+        );
+        const data = await response.json();
+
+        if (data && data.downloads) {
+          // Transform API data to our format
+          const transformedData = data.downloads.map((item: any) => ({
+            day: item.day,
+            downloads: item.downloads,
+            date: item.day,
+          }));
+
+          setDownloadTrend(transformedData);
+
+          // Calculate summaries
+          const weekData = transformedData.slice(-7);
+          const weeklyTotal = weekData.reduce(
+            (sum: number, item: DataPoint) => sum + item.downloads,
+            0
+          );
+          const monthlyTotal = transformedData.reduce(
+            (sum: number, item: DataPoint) => sum + item.downloads,
+            0
+          );
+
+          setDownloadSummary({
+            weekly: weeklyTotal.toLocaleString(),
+            monthly: monthlyTotal.toLocaleString(),
+          });
+
+          setDownloadStatus('success');
+        } else {
+          throw new Error('No download data found');
         }
+      } catch (error) {
+        console.error('Error fetching download data:', error);
+        setDownloadStatus('error');
 
-        const weeklyJson = await weeklyRes.json();
-        const monthlyJson = await monthlyRes.json();
+        // Fallback data
+        const fallbackData = [
+          { day: '2024-01-15', downloads: 150, date: '2024-01-15' },
+          { day: '2024-01-16', downloads: 200, date: '2024-01-16' },
+          { day: '2024-01-17', downloads: 180, date: '2024-01-17' },
+          { day: '2024-01-18', downloads: 220, date: '2024-01-18' },
+          { day: '2024-01-19', downloads: 190, date: '2024-01-19' },
+          { day: '2024-01-20', downloads: 240, date: '2024-01-20' },
+          { day: '2024-01-21', downloads: 280, date: '2024-01-21' },
+          { day: '2024-01-22', downloads: 320, date: '2024-01-22' },
+          { day: '2024-01-23', downloads: 290, date: '2024-01-23' },
+          { day: '2024-01-24', downloads: 350, date: '2024-01-24' },
+          { day: '2024-01-25', downloads: 380, date: '2024-01-25' },
+          { day: '2024-01-26', downloads: 420, date: '2024-01-26' },
+          { day: '2024-01-27', downloads: 390, date: '2024-01-27' },
+          { day: '2024-01-28', downloads: 450, date: '2024-01-28' },
+        ];
 
-        if (weeklyJson.error || monthlyJson.error) {
-          throw new Error(weeklyJson.error || monthlyJson.error);
-        }
-
-        const weeklyDownloads = Array.isArray(weeklyJson.downloads)
-          ? weeklyJson.downloads
-          : [];
-
-        const trend: DataPoint[] = weeklyDownloads.map(
-          (item: { day: string; downloads: number }) => ({
-            label: new Date(item.day).toLocaleDateString('en-US', {
-              month: 'short',
-              day: '2-digit',
-            }),
-            value: item.downloads ?? 0,
-          })
+        setDownloadTrend(fallbackData);
+        const weekData = fallbackData.slice(-7);
+        const weeklyTotal = weekData.reduce(
+          (sum: number, item: DataPoint) => sum + item.downloads,
+          0
+        );
+        const monthlyTotal = fallbackData.reduce(
+          (sum: number, item: DataPoint) => sum + item.downloads,
+          0
         );
 
-        const weeklyTotal = trend.reduce((sum, item) => sum + item.value, 0);
-        const monthlyTotal = Number(monthlyJson.downloads ?? 0);
-
-        setDownloadTrend(trend);
         setDownloadSummary({
-          weekly: formatCount(weeklyTotal),
-          monthly: formatCount(monthlyTotal),
+          weekly: weeklyTotal.toLocaleString(),
+          monthly: monthlyTotal.toLocaleString(),
         });
-
-        setDownloadStatus(weeklyTotal > 0 ? 'ready' : 'empty');
-      } catch (error) {
-        setDownloadStatus('error');
       }
-    }
+    };
 
-    loadDownloads();
+    fetchDownloadData();
   }, []);
 
-  const linePath = buildLinePath(downloadTrend);
-  const areaPath = buildAreaPath(downloadTrend);
-
   const downloadsMessage = {
-    loading: 'Fetching npm download data...',
-    empty:
-      'No npm downloads recorded yet. Once installs land, this chart updates automatically.',
-    ready: 'Weekly npm downloads pulled directly from the npm registry.',
-    error:
-      'Could not load npm download data right now. Try again after a refresh.',
+    loading: 'Loading download statistics...',
+    success: 'Live npm download data',
+    error: 'Unable to load live data (showing sample)',
   }[downloadStatus];
 
   return (
-    <section className="border-t border-border bg-card/50">
-      <div className="container grid gap-10 py-16">
-        <div className="mx-auto max-w-2xl space-y-3 text-center">
-          <h2 className="text-2xl font-semibold text-gray-800">Downloads</h2>
-          <p className="text-base text-muted-foreground text-gray-700">
-            {downloadsMessage}
+    <section className="container mx-auto py-16">
+      <div className="mx-auto max-w-4xl">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+            Download Statistics
+          </h2>
+          <p className="text-lg text-muted-foreground mb-2">
+            Join thousands of developers using InitGen CLI
           </p>
+          <p className="text-sm text-gray-500">{downloadsMessage}</p>
         </div>
 
-        <Card className="mx-auto w-full max-w-4xl">
-          <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="space-y-1">
-              <CardTitle className="text-xl font-semibold text-gray-800">
-                Weekly installs
-              </CardTitle>
-              <CardDescription className="text-gray-700">
-                Pulling data straight from npm download metrics.
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Summary Cards */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Downloads Summary</CardTitle>
+              <CardDescription>
+                Recent download statistics for InitGen CLI
               </CardDescription>
-            </div>
-            <div className="flex flex-wrap gap-6 text-sm">
-              <div className="text-left">
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
                 <span className="block text-gray-800">This week</span>
                 <span className="text-lg font-semibold text-gray-800">
                   {downloadSummary.weekly}
                 </span>
               </div>
-              <div className="text-left">
-                <span className="block text-muted-foreground  text-gray-800">
-                  Rolling 30 days
-                </span>
+              <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+                <span className="block text-gray-800">This month</span>
                 <span className="text-lg font-semibold text-gray-800">
                   {downloadSummary.monthly}
                 </span>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-background p-6">
-              <svg
-                viewBox="0 0 100 100"
-                className="h-48 w-full"
-                preserveAspectRatio="none"
-              >
-                <path
-                  d="M 0 90 L 100 90"
-                  stroke="rgba(15,23,42,0.06)"
-                  strokeWidth="1"
-                />
-                <path
-                  d={areaPath}
-                  fill="rgba(37, 99, 235, 0.1)"
-                  stroke="none"
-                />
-                <path
-                  d={linePath}
-                  fill="none"
-                  stroke="rgb(37, 99, 235)"
-                  strokeWidth="2.5"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {downloadStatus !== 'ready' && (
-                <div className="absolute inset-0 flex items-center justify-center bg-background/80 text-xs text-muted-foreground backdrop-blur-sm">
-                  {downloadStatus === 'loading'
-                    ? 'Loading download data...'
-                    : downloadStatus === 'empty'
-                    ? 'No downloads yet'
-                    : 'Data unavailable'}
-                </div>
-              )}
-              <div className="absolute inset-x-6 bottom-6 flex justify-between text-xs text-muted-foreground text-gray-700">
-                {downloadTrend.map((point) => (
-                  <span key={point.label}>{point.label}</span>
-                ))}
+            </CardContent>
+          </Card>
+
+          {/* Interactive Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Download Trend</CardTitle>
+              <CardDescription>
+                Interactive chart showing daily downloads over time
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={downloadTrend}>
+                    <defs>
+                      <linearGradient
+                        id="colorDownloads"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#3B82F6"
+                          stopOpacity={0.3}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#3B82F6"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                    <XAxis
+                      dataKey="day"
+                      tickFormatter={(value: string) => {
+                        const date = new Date(value);
+                        return date.toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        });
+                      }}
+                      tick={{ fontSize: 12 }}
+                      stroke="#666"
+                    />
+                    <YAxis
+                      tickFormatter={(value: number) => value.toLocaleString()}
+                      tick={{ fontSize: 12 }}
+                      stroke="#666"
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area
+                      type="monotone"
+                      dataKey="downloads"
+                      stroke="#3B82F6"
+                      fillOpacity={1}
+                      fill="url(#colorDownloads)"
+                      strokeWidth={2}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
-            </div>
-            <p className="text-sm text-muted-foreground text-center text-gray-700">
-              {downloadsMessage}
-            </p>
-          </CardContent>
-        </Card>
+              <p className="text-sm text-muted-foreground text-center mt-4">
+                Hover over the chart to see detailed download numbers for each
+                day
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </section>
   );
