@@ -1,6 +1,6 @@
 {
   "name": "initgen",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A beautiful, interactive CLI tool to scaffold modern web and backend projects with React, Next.js, Vue, Node.js, Python Flask/Django and more. Zero configuration, production-ready projects in seconds!",
   "main": "index.js",
   "type": "module",

@@ -41,6 +41,9 @@ yarn-error.log*
 dist/
 build/
 
+# Documentation site
+docs/
+
 # Optional
 .prettierrc
 .eslintrc
