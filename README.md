@@ -7,6 +7,8 @@
 
 A powerful, interactive command-line tool to scaffold modern web and backend projects with zero configuration. Create production-ready projects with your preferred tech stack in seconds!
 
+📖 **[Full Documentation & Interactive Demo](https://initgen.pankajk.tech/)**
+
 ## ✨ Features
 
 - 🎨 **Beautiful Interactive UI** - Animated CLI with colorful prompts

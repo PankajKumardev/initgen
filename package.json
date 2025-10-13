@@ -43,7 +43,7 @@
   "bugs": {
     "url": "https://github.com/PankajKumardev/initgen/issues"
   },
-  "homepage": "https://github.com/PankajKumardev/initgen#readme",
+  "homepage": "https://initgen.pankajk.tech/",
   "engines": {
     "node": ">=14.0.0"
   },
