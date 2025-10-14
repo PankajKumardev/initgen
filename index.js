@@ -20,6 +20,7 @@ import { createReadme, createPythonReadme } from './src/utils/readme.js';
 // Import templates
 import { setupReactViteTemplate } from './src/templates/reactVite.js';
 import { setupTailwind } from './src/templates/tailwind.js';
+import { setupShadcn } from './src/templates/shadcn.js';
 import { setupNextjsTemplate } from './src/templates/nextjs.js';
 import { setupVueTemplate } from './src/templates/vue.js';
 import {
@@ -49,7 +50,9 @@ async function mainMenu() {
       choices: [
         { name: 'React (Vite)', value: 'react-vite' },
         { name: 'Vite + React + Tailwind v4', value: 'vite-tailwind' },
+        { name: 'Vite + React + Tailwind + shadcn/ui', value: 'vite-shadcn' },
         { name: 'Next.js', value: 'nextjs' },
+        { name: 'Next.js + shadcn/ui', value: 'nextjs-shadcn' },
         { name: 'Vue (Vite)', value: 'vue' },
         { name: 'Node.js + Express', value: 'node-express' },
         { name: 'Python + Flask', value: 'python-flask' },
@@ -71,11 +74,13 @@ async function mainMenu() {
     },
   ]);
 
-  // Ask for TypeScript if it's a Vite React, Tailwind, Next.js, Vue, or Node.js project
+  // Ask for TypeScript if it's a Vite React, Tailwind, shadcn, Next.js, Vue, or Node.js project
   if (
     answers.stack === 'react-vite' ||
     answers.stack === 'vite-tailwind' ||
+    answers.stack === 'vite-shadcn' ||
     answers.stack === 'nextjs' ||
+    answers.stack === 'nextjs-shadcn' ||
     answers.stack === 'vue' ||
     answers.stack === 'node-express'
   ) {
@@ -183,11 +188,15 @@ async function createProjectStructure(config) {
   } else {
     let command;
 
-    // Handle react-vite and vite-tailwind with dynamic template
-    if (stack === 'react-vite' || stack === 'vite-tailwind') {
+    // Handle react-vite, vite-tailwind, and vite-shadcn with dynamic template
+    if (
+      stack === 'react-vite' ||
+      stack === 'vite-tailwind' ||
+      stack === 'vite-shadcn'
+    ) {
       const template = useTypeScript ? 'react-ts' : 'react';
       command = `npm create vite@latest ${projectName} -- --template ${template}`;
-    } else if (stack === 'nextjs') {
+    } else if (stack === 'nextjs' || stack === 'nextjs-shadcn') {
       // Next.js with dynamic TypeScript choice
       if (useTypeScript) {
         command = `npx create-next-app@latest ${projectName} --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes`;
@@ -228,8 +237,13 @@ async function createProjectStructure(config) {
     }
 
     // Setup templates for Next.js and Vue
-    if (stack === 'nextjs') {
-      await setupNextjsTemplate(projectPath, projectName, useTypeScript);
+    if (stack === 'nextjs' || stack === 'nextjs-shadcn') {
+      await setupNextjsTemplate(
+        projectPath,
+        projectName,
+        useTypeScript,
+        stack === 'nextjs-shadcn'
+      );
     } else if (stack === 'vue') {
       // Install dependencies for Vue
       try {
@@ -245,8 +259,13 @@ async function createProjectStructure(config) {
     }
 
     // Setup Tailwind if needed
-    if (stackConfig.setupTailwind) {
+    if (stackConfig.setupTailwind && !stackConfig.setupShadcn) {
       await setupTailwind(projectPath, projectName);
+    }
+
+    // Setup shadcn/ui if needed (includes Tailwind) - but not for Next.js as it's already handled
+    if (stackConfig.setupShadcn && !stack.startsWith('nextjs')) {
+      await setupShadcn(projectPath, projectName, useTypeScript);
     }
   }
 

@@ -10,10 +10,23 @@ export const stackCommands = {
     needsInstall: false, // We install everything during setup
     setupTailwind: true,
   },
+  'vite-shadcn': {
+    command: null, // Will be set dynamically based on TS choice
+    name: 'Vite + React + Tailwind + shadcn/ui',
+    needsInstall: false, // We install everything during setup
+    setupTailwind: true,
+    setupShadcn: true,
+  },
   nextjs: {
     command: null, // Will be set dynamically based on TS choice
     name: 'Next.js',
     needsInstall: false,
+  },
+  'nextjs-shadcn': {
+    command: null, // Will be set dynamically based on TS choice
+    name: 'Next.js + shadcn/ui',
+    needsInstall: false,
+    setupShadcn: true,
   },
   vue: {
     command: null, // Will be set dynamically based on TS choice

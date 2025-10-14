@@ -1,29 +1,35 @@
 export default function FeaturesSection() {
   const features = [
     {
+      title: 'shadcn/ui Integration',
+      description:
+        'Built-in shadcn/ui support with automatic component setup, Tailwind v4 compatibility, and pre-installed dependencies.',
+    },
+    {
       title: 'Interactive CLI',
-      description: 'Beautiful command-line interface with intuitive prompts and real-time feedback.'
+      description:
+        'Beautiful command-line interface with intuitive prompts and real-time feedback.',
     },
     {
       title: 'Lightning Fast',
-      description: 'Generate complete projects in seconds with optimized templates and zero configuration.'
+      description:
+        'Generate complete projects in seconds with optimized templates and zero configuration.',
     },
     {
-      title: 'Multiple Frameworks',
-      description: 'Support for React, Next.js, Vue, Node.js, Python Flask/Django, and more.'
+      title: '10 Tech Stacks',
+      description:
+        'Support for React, Next.js + shadcn/ui, Vue, Node.js, Python Flask/Django, and specialized component libraries.',
     },
     {
-      title: 'Production Ready',
-      description: 'All templates include best practices, TypeScript, ESLint, and modern tooling.'
+      title: 'Smart File Extensions',
+      description:
+        'Automatically creates .jsx files for JavaScript projects and .tsx for TypeScript with proper component structure.',
     },
     {
-      title: 'Smart Configurations',
-      description: 'Automatic setup of development environments with tailored configurations.'
+      title: 'Tailwind CSS v4',
+      description:
+        'Modern utility-first CSS framework with CSS variables and enhanced theming across all templates.',
     },
-    {
-      title: 'Customizable',
-      description: 'Flexible options to customize project structure, dependencies, and settings.'
-    }
   ];
 
   return (
@@ -40,7 +46,10 @@ export default function FeaturesSection() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
-            <div key={index} className="p-6 rounded-lg border border-gray-200 bg-white">
+            <div
+              key={index}
+              className="p-6 rounded-lg border border-gray-200 bg-white"
+            >
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {feature.title}
               </h3>

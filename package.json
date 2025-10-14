@@ -1,7 +1,7 @@
 {
   "name": "initgen",
-  "version": "1.0.4",
-  "description": "A beautiful, interactive CLI tool to scaffold modern web and backend projects with React, Next.js, Vue, Node.js, Python Flask/Django and more. Zero configuration, production-ready projects in seconds!",
+  "version": "2.0.0",
+  "description": "A beautiful, interactive CLI tool to scaffold modern web and backend projects with React, Next.js, Vue, Node.js, Python Flask/Django, shadcn/ui and more. Zero configuration, production-ready projects in seconds with Tailwind CSS v4!",
   "main": "index.js",
   "type": "module",
   "bin": {
@@ -24,6 +24,8 @@
     "flask",
     "django",
     "tailwind",
+    "shadcn",
+    "shadcn-ui",
     "vite",
     "project-generator",
     "boilerplate",
@@ -59,8 +61,7 @@
     "figlet": "^1.7.0",
     "gradient-string": "^2.0.1",
     "inquirer": "^9.2.7",
-    "nanospinner": "^1.1.0",
-    "@vercel/analytics": "^1.5.0"
+    "nanospinner": "^1.1.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.14",

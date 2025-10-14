@@ -5,18 +5,21 @@ export default function Hero() {
   return (
     <section className="container flex min-h-[80vh] flex-col items-center justify-center gap-6 py-24 text-center">
       <div className="space-y-6">
-        <h1 className="text-5xl font-semibold tracking-tight sm:text-7xl text-blue-500">
-          InitGen CLI
-        </h1>
+        <div className="flex items-center justify-center gap-3 mb-2">
+          <h1 className="text-5xl font-semibold tracking-tight sm:text-7xl text-blue-500">
+            InitGen CLI
+          </h1>
+          <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            v2.0
+          </span>
+        </div>
         <div className="space-y-4">
           <p className="mx-auto max-w-2xl text-2xl font-semibold text-gray-800 sm:text-3xl">
             Generate project starters with zero setup.
           </p>
           <p className="mx-auto max-w-2xl text-base text-gray-700 sm:text-lg">
             InitGen lets you scaffold ready-to-code projects for React, Next.js,
-            Vue, Express, and Python all through one interactive CLI. It
-            installs dependencies, sets up structure, and leaves you with a
-            clean repo ready to push.
+            Vue, Express, and Python all through one interactive CLI.
           </p>
         </div>
       </div>
