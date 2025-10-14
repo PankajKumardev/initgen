@@ -1,6 +1,6 @@
 {
   "name": "initgen",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A beautiful, interactive CLI tool to scaffold modern web and backend projects with React, Next.js, Vue, Node.js, Python Flask/Django, shadcn/ui and more. Zero configuration, production-ready projects in seconds with Tailwind CSS v4!",
   "main": "index.js",
   "type": "module",
