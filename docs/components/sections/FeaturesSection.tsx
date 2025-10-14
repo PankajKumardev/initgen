@@ -1,9 +1,9 @@
 export default function FeaturesSection() {
   const features = [
     {
-      title: 'shadcn/ui Integration',
+      title: 'shadcn/ui Ready',
       description:
-        'Built-in shadcn/ui support with automatic component setup, Tailwind v4 compatibility, and pre-installed dependencies.',
+        'Complete shadcn/ui setup with configuration files, dependencies, and project structure ready for component installation.',
     },
     {
       title: 'Interactive CLI',
@@ -28,7 +28,7 @@ export default function FeaturesSection() {
     {
       title: 'Tailwind CSS v4',
       description:
-        'Modern utility-first CSS framework with CSS variables and enhanced theming across all templates.',
+        'Modern utility-first CSS framework available in Tailwind-specific templates with CSS variables and enhanced theming.',
     },
   ];
 

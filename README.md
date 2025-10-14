@@ -11,11 +11,11 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 
 ## 🎉 What's New in v2.0
 
-- 🎨 **shadcn/ui Integration** - Full support for React component library with Tailwind
+- 🎨 **shadcn/ui Integration** - Ready-to-use setup for shadcn/ui with automatic configuration
 - 🔧 **Enhanced Next.js Templates** - Improved file structure with proper .jsx/.tsx extensions
-- 📦 **Tailwind CSS v4 Everywhere** - All templates now use modern Tailwind v4
+- 📦 **Tailwind CSS v4 Support** - Available in specific templates (Vite + Tailwind, shadcn variants)
 - 🎯 **Better JavaScript Support** - Proper .jsx extensions for JavaScript projects
-- ⚡ **Automatic Dependency Management** - Pre-configured shadcn components and dependencies
+- ⚡ **Automatic Setup** - Pre-configured project structure and dependencies
 
 ## ✨ Features
 
@@ -23,8 +23,8 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 - 🔧 **10 Tech Stacks Supported** - React, Next.js, Vue, Node.js, Python frameworks + shadcn/ui
 - 📦 **Automatic Dependency Installation** - npm install & pip install handled automatically
 - 🎯 **TypeScript Support** - Choose JS or TS for React, Vue, Next.js, and Node.js
-- 🎨 **Tailwind CSS v4** - Modern styling with the latest Tailwind across all templates
-- 🧩 **shadcn/ui Components** - Pre-configured component library with automatic setup
+- 🎨 **Tailwind CSS v4** - Modern styling in Tailwind-specific templates
+- 🧩 **shadcn/ui Setup** - Ready-to-use configuration for adding shadcn components
 - 📝 **Auto-generated Files** - README, .gitignore, and project structure
 - ⚡ **Ready to Run** - Projects work immediately after creation
 - 🔧 **Smart File Extensions** - Proper .jsx/.tsx extensions based on language choice
@@ -282,7 +282,7 @@ All templates come with:
 - ✅ **Production Ready** - Optimized configuration
 - ✅ **Pre-configured Routes** - Basic API endpoints included
 - ✅ **Developer Experience** - Hot reload, fast refresh, auto-restart
-- ✅ **Tailwind CSS v4** - Modern utility-first CSS framework
+- ✅ **Tailwind CSS v4** - Available in Tailwind-specific templates
 - ✅ **Smart File Extensions** - Proper .jsx/.tsx based on language choice
 
 ### Template Features
@@ -298,12 +298,12 @@ All templates come with:
 
 #### shadcn/ui Templates
 
-- Pre-installed shadcn components (Button, Card)
+- Ready-to-use shadcn/ui setup (no pre-installed components)
 - Automatic dependency management (clsx, tailwind-merge, class-variance-authority)
-- Proper TypeScript/JavaScript component structure
+- Proper TypeScript/JavaScript project structure
 - shadcn CLI configuration (components.json)
 - Tailwind v4 compatibility with CSS variables
-- Manual component fallbacks for reliability
+- Ready for `npx shadcn@latest add` commands
 
 #### Backend Templates
 
@@ -356,17 +356,17 @@ Located in `src/templates/`
 - `inquirer` - Interactive prompts
 - `nanospinner` - Loading spinners
 
-## � v2.0 Features Deep Dive
+## 🔧 v2.0 Features Deep Dive
 
 ### shadcn/ui Integration
 
-InitGen v2.0 includes full shadcn/ui support with:
+InitGen v2.0 includes shadcn/ui setup with:
 
-- **Automatic Component Installation**: Button and Card components pre-installed
+- **Ready-to-Use Configuration**: Complete setup without pre-installed components
 - **Dependency Management**: All required packages (clsx, tailwind-merge, class-variance-authority, @radix-ui/react-slot) automatically installed
 - **Tailwind v4 Compatibility**: Custom CSS variables for seamless theming
-- **TypeScript/JavaScript Support**: Proper component structure for both languages
-- **Manual Fallbacks**: Reliable component loading with error handling
+- **TypeScript/JavaScript Support**: Proper project structure for both languages
+- **Components On-Demand**: Add components with `npx shadcn@latest add [component]`
 
 ### Enhanced Next.js Templates
 
@@ -505,9 +505,9 @@ MIT License - feel free to use this for personal or commercial projects!
 
 ### Completed in v2.0 ✅
 
-- [x] shadcn/ui integration for React and Next.js
+- [x] shadcn/ui setup for React and Next.js (configuration ready)
 - [x] Enhanced Next.js templates with proper file extensions
-- [x] Tailwind CSS v4 support across all templates
+- [x] Tailwind CSS v4 support in specific templates
 - [x] Smart JavaScript/TypeScript file extension handling
 
 ### Future Plans
