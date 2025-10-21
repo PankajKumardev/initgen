@@ -4,7 +4,7 @@ const quickStart = [
   {
     title: 'Choose your starter',
     description:
-      'Pick from React (Vite), Vite + shadcn/ui, Next.js + shadcn/ui, Vite + Tailwind v4, Vue, Node.js Express, or Python starters with sensible defaults and modern tooling.',
+      'Pick from React (Vite), Vite + shadcn/ui, Next.js + shadcn/ui, Vite + Tailwind v4, Vue, Node.js Express with database ORMs, or Python starters with sensible defaults and modern tooling.',
   },
   {
     title: 'Answer guided prompts',
@@ -25,10 +25,10 @@ export default function QuickStartSection() {
         <div className="mx-auto max-w-2xl space-y-3 text-center">
           <h2 className="text-2xl font-semibold text-gray-800">Quick start</h2>
           <p className="text-base text-muted-foreground text-gray-700">
-            InitGen v2.0 keeps the CLI flow focused. Choose from 10 tech stacks
-            including shadcn/ui options, fill in the basics, confirm
-            JavaScript/TypeScript with smart file extensions, and finish with a
-            git decision to ship a production-ready repository.
+            InitGen v2.0 keeps the CLI flow focused. Choose from 12 tech stacks
+            including shadcn/ui and database options, fill in the basics,
+            confirm JavaScript/TypeScript with smart file extensions, and finish
+            with a git decision to ship a production-ready repository.
           </p>
         </div>
 

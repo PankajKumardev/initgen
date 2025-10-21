@@ -37,6 +37,14 @@ export const stackCommands = {
     name: 'Node.js + Express',
     manual: true,
   },
+  'node-prisma': {
+    name: 'Node.js + Express + Prisma (PostgreSQL)',
+    manual: true,
+  },
+  'node-drizzle': {
+    name: 'Node.js + Express + Drizzle (PostgreSQL)',
+    manual: true,
+  },
   'python-flask': {
     name: 'Python + Flask',
     manual: true,

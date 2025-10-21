@@ -1,7 +1,7 @@
 export default function FeaturesSection() {
   const features = [
     {
-      title: 'shadcn/ui Ready',
+      title: 'Shadcn/ui Ready',
       description:
         'Complete shadcn/ui setup with configuration files, dependencies, and project structure ready for component installation.',
     },
@@ -16,9 +16,9 @@ export default function FeaturesSection() {
         'Generate complete projects in seconds with optimized templates and zero configuration.',
     },
     {
-      title: '10 Tech Stacks',
+      title: '12 Tech Stacks',
       description:
-        'Support for React, Next.js + shadcn/ui, Vue, Node.js, Python Flask/Django, and specialized component libraries.',
+        'Support for React, Next.js + shadcn/ui, Vue, Node.js with database ORMs (Prisma/Drizzle), Python Flask/Django, and specialized component libraries.',
     },
     {
       title: 'Smart File Extensions',

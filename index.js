@@ -15,7 +15,11 @@ import { gitignoreTemplates } from './src/config/gitignoreTemplates.js';
 
 // Import utilities
 import { runCommand } from './src/utils/command.js';
-import { createReadme, createPythonReadme } from './src/utils/readme.js';
+import {
+  createReadme,
+  createPythonReadme,
+  createDatabaseReadme,
+} from './src/utils/readme.js';
 
 // Import templates
 import { setupReactViteTemplate } from './src/templates/reactVite.js';
@@ -25,6 +29,8 @@ import { setupNextjsTemplate } from './src/templates/nextjs.js';
 import { setupVueTemplate } from './src/templates/vue.js';
 import {
   createNodeExpressProject,
+  createNodePrismaProject,
+  createNodeDrizzleProject,
   createPythonFlaskProject,
   createPythonFastAPIProject,
   createPythonDjangoProject,
@@ -55,6 +61,14 @@ async function mainMenu() {
         { name: 'Next.js + shadcn/ui', value: 'nextjs-shadcn' },
         { name: 'Vue (Vite)', value: 'vue' },
         { name: 'Node.js + Express', value: 'node-express' },
+        {
+          name: 'Node.js + Express + Prisma (PostgreSQL)',
+          value: 'node-prisma',
+        },
+        {
+          name: 'Node.js + Express + Drizzle (PostgreSQL)',
+          value: 'node-drizzle',
+        },
         { name: 'Python + Flask', value: 'python-flask' },
         { name: 'Python + FastAPI', value: 'python-fastapi' },
         { name: 'Python + Django', value: 'python-django' },
@@ -82,7 +96,9 @@ async function mainMenu() {
     answers.stack === 'nextjs' ||
     answers.stack === 'nextjs-shadcn' ||
     answers.stack === 'vue' ||
-    answers.stack === 'node-express'
+    answers.stack === 'node-express' ||
+    answers.stack === 'node-prisma' ||
+    answers.stack === 'node-drizzle'
   ) {
     const tsAnswer = await inquirer.prompt([
       {
@@ -136,6 +152,44 @@ async function createProjectStructure(config) {
         console.log(
           chalk.yellow(
             '  ⚠ Could not install dependencies. Run "npm install" manually.'
+          )
+        );
+      }
+    } else if (stack === 'node-prisma') {
+      await createNodePrismaProject(projectPath, projectName, useTypeScript);
+
+      // Install dependencies for Node + Prisma
+      try {
+        console.log(chalk.dim('  📦 Installing dependencies...'));
+        await runCommand('npm install', projectPath);
+        console.log(chalk.dim('  ✓ Installed dependencies'));
+
+        console.log(chalk.dim('  🔧 Setting up Prisma...'));
+        await runCommand('npx prisma generate', projectPath);
+        console.log(chalk.dim('  ✓ Generated Prisma client'));
+      } catch (error) {
+        console.log(
+          chalk.yellow(
+            '  ⚠ Could not install dependencies or setup Prisma. Run "npm install" and "npx prisma generate" manually.'
+          )
+        );
+      }
+    } else if (stack === 'node-drizzle') {
+      await createNodeDrizzleProject(projectPath, projectName, useTypeScript);
+
+      // Install dependencies for Node + Drizzle
+      try {
+        console.log(chalk.dim('  📦 Installing dependencies...'));
+        await runCommand('npm install', projectPath);
+        console.log(chalk.dim('  ✓ Installed dependencies'));
+
+        console.log(chalk.dim('  🔧 Setting up Drizzle...'));
+        await runCommand('npm run db:generate', projectPath);
+        console.log(chalk.dim('  ✓ Generated Drizzle schema'));
+      } catch (error) {
+        console.log(
+          chalk.yellow(
+            '  ⚠ Could not install dependencies or setup Drizzle. Run "npm install" and "npm run db:generate" manually.'
           )
         );
       }
@@ -271,9 +325,16 @@ async function createProjectStructure(config) {
 
   const gitignorePath = path.join(projectPath, '.gitignore');
   const isPython = stack.startsWith('python');
-  const gitignoreTemplate = isPython
-    ? gitignoreTemplates.python
-    : gitignoreTemplates.javascript;
+  const isDatabase = stack === 'node-prisma' || stack === 'node-drizzle';
+
+  let gitignoreTemplate;
+  if (isPython) {
+    gitignoreTemplate = gitignoreTemplates.python;
+  } else if (isDatabase) {
+    gitignoreTemplate = gitignoreTemplates['javascript-db'];
+  } else {
+    gitignoreTemplate = gitignoreTemplates.javascript;
+  }
 
   if (fs.existsSync(gitignorePath)) {
     const existingContent = fs.readFileSync(gitignorePath, 'utf-8');
@@ -284,13 +345,21 @@ async function createProjectStructure(config) {
 
   const readmePath = path.join(projectPath, 'README.md');
   if (!fs.existsSync(readmePath)) {
-    const readme = isPython
-      ? createPythonReadme(
-          projectName,
-          stackConfig.name,
-          stack === 'python-flask'
-        )
-      : createReadme(projectName, stackConfig.name);
+    let readme;
+    if (isPython) {
+      readme = createPythonReadme(
+        projectName,
+        stackConfig.name,
+        stack === 'python-flask'
+      );
+    } else if (isDatabase) {
+      const dbType = stack === 'node-prisma' ? 'prisma' : 'drizzle';
+      readme = createDatabaseReadme
+        ? createDatabaseReadme(projectName, stackConfig.name, dbType)
+        : createReadme(projectName, stackConfig.name);
+    } else {
+      readme = createReadme(projectName, stackConfig.name);
+    }
     fs.writeFileSync(readmePath, readme);
   }
 
@@ -338,6 +407,23 @@ async function run() {
     } else if (config.stack === 'node-express') {
       console.log(chalk.white(`   cd ${config.projectName}`));
       console.log(chalk.white(`   npm run dev`));
+    } else if (config.stack === 'node-prisma') {
+      console.log(chalk.white(`   cd ${config.projectName}`));
+      console.log(chalk.white(`   npm run db:migrate`));
+      console.log(chalk.white(`   npm run dev`));
+      console.log('');
+      console.log(chalk.dim('   💡 Additional commands:'));
+      console.log(chalk.dim('   npm run db:studio  # View database'));
+    } else if (config.stack === 'node-drizzle') {
+      console.log(chalk.white(`   cd ${config.projectName}`));
+      console.log(chalk.white(`   npm run db:create`));
+      console.log(chalk.white(`   npm run db:generate`));
+      console.log(chalk.white(`   npm run db:push`));
+      console.log(chalk.white(`   npm run dev`));
+      console.log('');
+      console.log(chalk.dim('   💡 Additional commands:'));
+      console.log(chalk.dim('   npm run db:studio  # View database'));
+      console.log(chalk.dim('   npm run db:migrate # Run migrations'));
     } else {
       console.log(chalk.white(`   cd ${config.projectName}`));
       console.log(chalk.white(`   npm run dev`));

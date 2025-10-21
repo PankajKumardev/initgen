@@ -19,7 +19,8 @@ export default function Hero() {
           </p>
           <p className="mx-auto max-w-2xl text-base text-gray-700 sm:text-lg">
             InitGen lets you scaffold ready-to-code projects for React, Next.js,
-            Vue, Express, and Python all through one interactive CLI.
+            Vue, Express with database ORMs, and Python all through one
+            interactive CLI.
           </p>
         </div>
       </div>

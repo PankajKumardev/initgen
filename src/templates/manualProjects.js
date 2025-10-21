@@ -139,6 +139,650 @@ app.listen(PORT, () => {
   );
 }
 
+export async function createNodePrismaProject(
+  projectPath,
+  projectName,
+  useTypeScript = false
+) {
+  const dirs = ['src', 'src/routes', 'src/controllers', 'src/models', 'prisma'];
+  dirs.forEach((dir) => {
+    fs.mkdirSync(path.join(projectPath, dir), { recursive: true });
+  });
+
+  const fileExt = useTypeScript ? 'ts' : 'js';
+  const mainFile = `src/index.${fileExt}`;
+
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    description: 'A Node.js Express project with Prisma ORM and PostgreSQL',
+    main: mainFile,
+    type: 'module',
+    scripts: useTypeScript
+      ? {
+          start: 'node dist/index.js',
+          dev: 'tsx watch src/index.ts',
+          build: 'tsc',
+          'db:migrate': 'prisma migrate dev',
+          'db:generate': 'prisma generate',
+          'db:studio': 'prisma studio',
+        }
+      : {
+          start: 'node src/index.js',
+          dev: 'nodemon src/index.js',
+          'db:migrate': 'prisma migrate dev',
+          'db:generate': 'prisma generate',
+          'db:studio': 'prisma studio',
+        },
+    keywords: ['express', 'nodejs', 'prisma', 'postgresql'],
+    author: '',
+    license: 'ISC',
+    dependencies: {
+      express: '^4.18.2',
+      cors: '^2.8.5',
+      dotenv: '^16.3.1',
+      '@prisma/client': '^5.6.0',
+    },
+    devDependencies: useTypeScript
+      ? {
+          '@types/node': '^20.10.0',
+          '@types/express': '^4.17.21',
+          '@types/cors': '^2.8.17',
+          typescript: '^5.3.3',
+          tsx: '^4.7.0',
+          prisma: '^5.6.0',
+        }
+      : {
+          nodemon: '^3.0.1',
+          prisma: '^5.6.0',
+        },
+  };
+
+  fs.writeFileSync(
+    path.join(projectPath, 'package.json'),
+    JSON.stringify(packageJson, null, 2)
+  );
+
+  // Create Prisma schema
+  const prismaSchema = `// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Add your models here
+// Example:
+// model User {
+//   id        Int      @id @default(autoincrement())
+//   email     String   @unique
+//   name      String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+`;
+
+  fs.writeFileSync(
+    path.join(projectPath, 'prisma', 'schema.prisma'),
+    prismaSchema
+  );
+
+  // Prisma schema created above - no seed file needed
+
+  // Create main server file with Prisma
+  if (useTypeScript) {
+    const serverCode = `import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { PrismaClient } from '@prisma/client';
+
+dotenv.config();
+
+const app = express();
+const prisma = new PrismaClient();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to ${projectName} API with Prisma!',
+    version: '1.0.0',
+    database: 'Connected to PostgreSQL with Prisma ORM',
+  });
+});
+
+// Add your API routes here
+// Example:
+// app.get('/api/items', async (req, res) => {
+//   const items = await prisma.item.findMany();
+//   res.json(items);
+// });
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+app.listen(PORT, () => {
+  console.log(\`Server is running on http://localhost:\${PORT}\`);
+  console.log(\`Prisma Studio: npx prisma studio\`);
+});
+`;
+    fs.writeFileSync(path.join(projectPath, 'src', 'index.ts'), serverCode);
+
+    const tsconfigContent = `{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+`;
+    fs.writeFileSync(path.join(projectPath, 'tsconfig.json'), tsconfigContent);
+  } else {
+    const serverCode = `import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { PrismaClient } from '@prisma/client';
+
+dotenv.config();
+
+const app = express();
+const prisma = new PrismaClient();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to ${projectName} API with Prisma!',
+    version: '1.0.0',
+    database: 'Connected to PostgreSQL with Prisma ORM',
+  });
+});
+
+// Add your API routes here
+// Example:
+// app.get('/api/items', async (req, res) => {
+//   const items = await prisma.item.findMany();
+//   res.json(items);
+// });
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  await prisma.$disconnect();
+  process.exit(0);
+});
+
+app.listen(PORT, () => {
+  console.log(\`✅ Server is running on http://localhost:\${PORT}\`);
+  console.log(\`📊 Prisma Studio: npx prisma studio\`);
+});
+`;
+    fs.writeFileSync(path.join(projectPath, 'src', 'index.js'), serverCode);
+  }
+
+  fs.writeFileSync(
+    path.join(projectPath, '.env.example'),
+    `PORT=3000
+NODE_ENV=development
+DATABASE_URL="postgresql://username:password@localhost:5432/mydb?schema=public"
+`
+  );
+}
+
+export async function createNodeDrizzleProject(
+  projectPath,
+  projectName,
+  useTypeScript = false
+) {
+  const dirs = [
+    'src',
+    'src/routes',
+    'src/controllers',
+    'src/db',
+    'src/db/migrations',
+  ];
+  dirs.forEach((dir) => {
+    fs.mkdirSync(path.join(projectPath, dir), { recursive: true });
+  });
+
+  const fileExt = useTypeScript ? 'ts' : 'js';
+  const mainFile = `src/index.${fileExt}`;
+
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    description: 'A Node.js Express project with Drizzle ORM and PostgreSQL',
+    main: mainFile,
+    type: 'module',
+    scripts: useTypeScript
+      ? {
+          start: 'node dist/index.js',
+          dev: 'tsx watch src/index.ts',
+          build: 'tsc',
+          'db:create': 'tsx src/db/create.ts',
+          'db:generate': 'drizzle-kit generate',
+          'db:migrate': 'tsx src/db/migrate.ts',
+          'db:push': 'drizzle-kit push',
+          'db:studio': 'drizzle-kit studio',
+        }
+      : {
+          start: 'node src/index.js',
+          dev: 'nodemon src/index.js',
+          'db:create': 'node src/db/create.js',
+          'db:generate': 'drizzle-kit generate',
+          'db:migrate': 'node src/db/migrate.js',
+          'db:push': 'drizzle-kit push',
+          'db:studio': 'drizzle-kit studio',
+        },
+    keywords: ['express', 'nodejs', 'drizzle', 'postgresql'],
+    author: '',
+    license: 'ISC',
+    dependencies: {
+      express: '^4.18.2',
+      cors: '^2.8.5',
+      dotenv: '^16.3.1',
+      'drizzle-orm': '^0.33.0',
+      postgres: '^3.4.4',
+    },
+    devDependencies: useTypeScript
+      ? {
+          '@types/node': '^20.10.0',
+          '@types/express': '^4.17.21',
+          '@types/cors': '^2.8.17',
+          '@types/pg': '^8.10.9',
+          typescript: '^5.3.3',
+          tsx: '^4.7.0',
+          'drizzle-kit': '^0.24.0',
+        }
+      : {
+          nodemon: '^3.0.1',
+          'drizzle-kit': '^0.24.0',
+        },
+  };
+
+  fs.writeFileSync(
+    path.join(projectPath, 'package.json'),
+    JSON.stringify(packageJson, null, 2)
+  );
+
+  // Create Drizzle config
+  const drizzleConfig = useTypeScript
+    ? `import { defineConfig } from 'drizzle-kit';
+
+export default defineConfig({
+  schema: './src/db/schema.ts',
+  out: './src/db/migrations',
+  dialect: 'postgresql',
+  dbCredentials: {
+    url: process.env.DATABASE_URL!,
+  },
+});
+`
+    : `import { defineConfig } from 'drizzle-kit';
+
+export default defineConfig({
+  schema: './src/db/schema.js',
+  out: './src/db/migrations',
+  dialect: 'postgresql',
+  dbCredentials: {
+    url: process.env.DATABASE_URL,
+  },
+});
+`;
+
+  fs.writeFileSync(path.join(projectPath, 'drizzle.config.js'), drizzleConfig);
+
+  // Create schema file
+  const schemaContent = useTypeScript
+    ? `import { pgTable, serial, text, boolean, timestamp } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+
+// Add your database tables here
+// Example:
+// export const users = pgTable('users', {
+//   id: serial('id').primaryKey(),
+//   name: text('name'),
+//   email: text('email').notNull().unique(),
+//   createdAt: timestamp('created_at').defaultNow(),
+//   updatedAt: timestamp('updated_at').defaultNow(),
+// });
+
+// Example relations:
+// export const usersRelations = relations(users, ({ many }) => ({
+//   posts: many(posts),
+// }));
+
+// Example types:
+// export type User = typeof users.$inferSelect;
+// export type NewUser = typeof users.$inferInsert;
+`
+    : `import { pgTable, serial, text, boolean, timestamp } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+
+// Add your database tables here
+// Example:
+// export const users = pgTable('users', {
+//   id: serial('id').primaryKey(),
+//   name: text('name'),
+//   email: text('email').notNull().unique(),
+//   createdAt: timestamp('created_at').defaultNow(),
+//   updatedAt: timestamp('updated_at').defaultNow(),
+// });
+
+// Example relations:
+// export const usersRelations = relations(users, ({ many }) => ({
+//   posts: many(posts),
+// }));
+`;
+
+  fs.writeFileSync(
+    path.join(projectPath, 'src', 'db', `schema.${fileExt}`),
+    schemaContent
+  );
+
+  // Create database connection
+  const dbContent = useTypeScript
+    ? `import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import dotenv from 'dotenv';
+import * as schema from './schema.js';
+
+// Load environment variables
+dotenv.config();
+
+const connectionString = process.env.DATABASE_URL!;
+const client = postgres(connectionString);
+export const db = drizzle(client, { schema });
+`
+    : `import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import dotenv from 'dotenv';
+import * as schema from './schema.js';
+
+// Load environment variables
+dotenv.config();
+
+const connectionString = process.env.DATABASE_URL;
+const client = postgres(connectionString);
+export const db = drizzle(client, { schema });
+`;
+
+  fs.writeFileSync(
+    path.join(projectPath, 'src', 'db', `index.${fileExt}`),
+    dbContent
+  );
+
+  // Create migration file
+  const migrateContent = useTypeScript
+    ? `import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import { db } from './index.js';
+
+async function runMigrations() {
+  try {
+    await migrate(db, { migrationsFolder: './src/db/migrations' });
+    console.log('✅ Migrations completed successfully');
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Migration failed:', error);
+    process.exit(1);
+  }
+}
+
+runMigrations();
+`
+    : `import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import { db } from './index.js';
+
+async function runMigrations() {
+  try {
+    await migrate(db, { migrationsFolder: './src/db/migrations' });
+    console.log('✅ Migrations completed successfully');
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Migration failed:', error);
+    process.exit(1);
+  }
+}
+
+runMigrations();
+`;
+
+  fs.writeFileSync(
+    path.join(projectPath, 'src', 'db', `migrate.${fileExt}`),
+    migrateContent
+  );
+
+  // Create database creation script
+  const createContent = useTypeScript
+    ? `import postgres from 'postgres';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+async function createDatabase() {
+  const databaseUrl = process.env.DATABASE_URL!;
+  const url = new URL(databaseUrl);
+  const dbName = url.pathname.slice(1); // Remove leading slash
+  
+  // Connect to postgres database to create the target database
+  const adminUrl = databaseUrl.replace(\`/\${dbName}\`, '/postgres');
+  const adminClient = postgres(adminUrl);
+
+  try {
+    // Check if database exists
+    const result = await adminClient\`
+      SELECT 1 FROM pg_database WHERE datname = \${dbName}
+    \`;
+    
+    if (result.length === 0) {
+      // Create database if it doesn't exist
+      await adminClient.unsafe(\`CREATE DATABASE "\${dbName}"\`);
+      console.log(\`✅ Database '\${dbName}' created successfully\`);
+    } else {
+      console.log(\`📋 Database '\${dbName}' already exists\`);
+    }
+  } catch (error) {
+    console.error('❌ Database creation failed:', error);
+    process.exit(1);
+  } finally {
+    await adminClient.end();
+  }
+}
+
+createDatabase();
+`
+    : `import postgres from 'postgres';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+async function createDatabase() {
+  const databaseUrl = process.env.DATABASE_URL;
+  const url = new URL(databaseUrl);
+  const dbName = url.pathname.slice(1); // Remove leading slash
+  
+  // Connect to postgres database to create the target database
+  const adminUrl = databaseUrl.replace(\`/\${dbName}\`, '/postgres');
+  const adminClient = postgres(adminUrl);
+
+  try {
+    // Check if database exists
+    const result = await adminClient\`
+      SELECT 1 FROM pg_database WHERE datname = \${dbName}
+    \`;
+    
+    if (result.length === 0) {
+      // Create database if it doesn't exist
+      await adminClient.unsafe(\`CREATE DATABASE "\${dbName}"\`);
+      console.log(\`✅ Database '\${dbName}' created successfully\`);
+    } else {
+      console.log(\`📋 Database '\${dbName}' already exists\`);
+    }
+  } catch (error) {
+    console.error('❌ Database creation failed:', error);
+    process.exit(1);
+  } finally {
+    await adminClient.end();
+  }
+}
+
+createDatabase();
+`;
+
+  fs.writeFileSync(
+    path.join(projectPath, 'src', 'db', `create.${fileExt}`),
+    createContent
+  );
+
+  // Create main server file with Drizzle
+  if (useTypeScript) {
+    const serverCode = `import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { db } from './db/index.js';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to ${projectName} API with Drizzle ORM!',
+    version: '1.0.0',
+    database: 'Connected to PostgreSQL with Drizzle ORM',
+  });
+});
+
+// Add your API routes here
+// Example:
+// app.get('/api/items', async (req, res) => {
+//   const items = await db.query.items.findMany();
+//   res.json(items);
+// });
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, () => {
+  console.log(\`✅ Server is running on http://localhost:\${PORT}\`);
+  console.log(\`📊 Drizzle Studio: npm run db:studio\`);
+});
+`;
+    fs.writeFileSync(path.join(projectPath, 'src', 'index.ts'), serverCode);
+
+    const tsconfigContent = `{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+`;
+    fs.writeFileSync(path.join(projectPath, 'tsconfig.json'), tsconfigContent);
+  } else {
+    const serverCode = `import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { db } from './db/index.js';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to ${projectName} API with Drizzle ORM!',
+    version: '1.0.0',
+    database: 'Connected to PostgreSQL with Drizzle ORM',
+  });
+});
+
+// Add your API routes here
+// Example:
+// app.get('/api/items', async (req, res) => {
+//   const items = await db.query.items.findMany();
+//   res.json(items);
+// });
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, () => {
+  console.log(\`✅ Server is running on http://localhost:\${PORT}\`);
+  console.log(\`📊 Drizzle Studio: npm run db:studio\`);
+});
+`;
+    fs.writeFileSync(path.join(projectPath, 'src', 'index.js'), serverCode);
+  }
+
+  fs.writeFileSync(
+    path.join(projectPath, '.env.example'),
+    `PORT=3000
+NODE_ENV=development
+DATABASE_URL="postgresql://username:password@localhost:5432/mydb"
+`
+  );
+}
+
 export async function createPythonFlaskProject(projectPath, projectName) {
   const dirs = ['app', 'app/routes', 'app/models'];
   dirs.forEach((dir) => {

@@ -1,4 +1,4 @@
-# 🚀 InitGen v2.0
+# 🚀 InitGen v2.1.0
 
 [![npm version](https://img.shields.io/npm/v/initgen.svg)](https://www.npmjs.com/package/initgen)
 [![npm downloads](https://img.shields.io/npm/dm/initgen.svg)](https://www.npmjs.com/package/initgen)
@@ -9,7 +9,15 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 
 📖 **[Full Documentation & Interactive Demo](https://initgen.pankajk.tech/)**
 
-## 🎉 What's New in v2.0
+## 🎉 What's New in v2.1.0
+
+- 🗄️ **Database ORM Support** - Added Prisma ORM and Drizzle ORM backend options with PostgreSQL
+- 🚀 **Auto Database Creation** - Drizzle templates now include `db:create` script for seamless database setup
+- 🔧 **Enhanced Database Workflows** - Complete database migration, schema management, and studio tools
+- ⚡ **Zero Configuration Databases** - Database templates work out of the box with Docker PostgreSQL
+- 🛠️ **Robust Environment Loading** - Fixed environment variable loading for reliable database connections
+
+## ✨ Previous Features (v2.0)
 
 - 🎨 **shadcn/ui Integration** - Ready-to-use setup for shadcn/ui with automatic configuration
 - 🔧 **Enhanced Next.js Templates** - Improved file structure with proper .jsx/.tsx extensions
@@ -20,11 +28,13 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 ## ✨ Features
 
 - 🎨 **Beautiful Interactive UI** - Animated CLI with colorful prompts
-- 🔧 **10 Tech Stacks Supported** - React, Next.js, Vue, Node.js, Python frameworks + shadcn/ui
-- 📦 **Automatic Dependency Installation** - npm install & pip install handled automatically
-- 🎯 **TypeScript Support** - Choose JS or TS for React, Vue, Next.js, and Node.js
+- 🔧 **12 Tech Stacks Supported** - React, Next.js, Vue, Node.js, Python frameworks + shadcn/ui + Database ORMs
+- �️ **Database ORM Integration** - Prisma and Drizzle ORM with PostgreSQL support
+- �📦 **Automatic Dependency Installation** - npm install & pip install handled automatically
+- 🎯 **TypeScript Support** - Choose JS or TS for React, Vue, Next.js, Node.js, and Database projects
 - 🎨 **Tailwind CSS v4** - Modern styling in Tailwind-specific templates
 - 🧩 **shadcn/ui Setup** - Ready-to-use configuration for adding shadcn components
+- 🚀 **Database Tools** - Migration, schema generation, database studio, and auto-creation scripts
 - 📝 **Auto-generated Files** - README, .gitignore, and project structure
 - ⚡ **Ready to Run** - Projects work immediately after creation
 - 🔧 **Smart File Extensions** - Proper .jsx/.tsx extensions based on language choice
@@ -43,6 +53,8 @@ A powerful, interactive command-line tool to scaffold modern web and backend pro
 ### Backend Frameworks
 
 - **Node.js + Express** - Fast, minimalist web framework
+- **Node.js + Express + Prisma (PostgreSQL)** - 🆕 Express with Prisma ORM and PostgreSQL database
+- **Node.js + Express + Drizzle (PostgreSQL)** - 🆕 Express with Drizzle ORM and PostgreSQL database
 - **Python + Flask** - Lightweight WSGI web framework
 - **Python + Django** - High-level Python web framework
 
@@ -241,6 +253,39 @@ my-app/
 └── README.md
 ```
 
+### Node.js + Express + Prisma (PostgreSQL) 🆕
+
+```
+my-app/
+├── src/
+│   └── index.js/ts
+├── prisma/
+│   └── schema.prisma
+├── package.json
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
+### Node.js + Express + Drizzle (PostgreSQL) 🆕
+
+```
+my-app/
+├── src/
+│   ├── index.js/ts
+│   └── db/
+│       ├── index.js/ts
+│       ├── schema.js/ts
+│       ├── create.js/ts
+│       ├── migrate.js/ts
+│       └── migrations/
+├── drizzle.config.js
+├── package.json
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
 ### Python + Flask
 
 ```
@@ -312,6 +357,27 @@ All templates come with:
 - Environment variable support
 - Development server configuration
 - Organized folder structure
+
+#### Database Templates 🆕
+
+**Prisma ORM Templates**
+
+- Complete Prisma setup with PostgreSQL
+- Auto-generated Prisma Client
+- Database migration support
+- Prisma Studio for database visualization
+- TypeScript/JavaScript support
+- Commented schema examples for quick start
+
+**Drizzle ORM Templates**
+
+- Lightweight Drizzle ORM setup with PostgreSQL
+- Automatic database creation (`db:create` script)
+- Schema generation and migration tools
+- Drizzle Studio for database management
+- TypeScript/JavaScript support
+- Robust environment variable handling
+- Zero-config Docker PostgreSQL compatibility
 
 ## 🔧 Configuration
 
@@ -428,10 +494,36 @@ npm install -g typescript
 
 ### File Extension Issues
 
-If you're seeing .js files instead of .jsx in JavaScript projects, you're using an older version. Update to v2.0:
+If you're seeing .js files instead of .jsx in JavaScript projects, you're using an older version. Update to v2.1.0:
 
 ```bash
 npm update -g initgen
+```
+
+### Database Connection Issues 🆕
+
+**PostgreSQL "role does not exist" error:**
+
+```bash
+# Make sure PostgreSQL is running and check your DATABASE_URL
+# For Docker PostgreSQL without password:
+DATABASE_URL="postgresql://postgres@localhost:5432/your_db_name"
+```
+
+**Environment variables not loading:**
+
+- Database templates in v2.1.0+ automatically load environment variables
+- If using older templates, manually add `dotenv.config()` to your database connection file
+
+**Drizzle database creation fails:**
+
+```bash
+# Use the built-in database creation script:
+npm run db:create
+
+# Then proceed with schema setup:
+npm run db:generate
+npm run db:push
 ```
 
 ## 🌟 Examples
@@ -484,6 +576,38 @@ npx initgen
 # Git: Yes
 ```
 
+### Create a Node.js API with Prisma (PostgreSQL) 🆕
+
+```bash
+npx initgen
+# Choose: Node.js + Express + Prisma (PostgreSQL)
+# Name: my-prisma-api
+# Language: TypeScript
+# Git: Yes
+
+# After creation:
+cd my-prisma-api
+npm run db:migrate
+npm run dev
+```
+
+### Create a Node.js API with Drizzle (PostgreSQL) 🆕
+
+```bash
+npx initgen
+# Choose: Node.js + Express + Drizzle (PostgreSQL)
+# Name: my-drizzle-api
+# Language: JavaScript
+# Git: Yes
+
+# After creation:
+cd my-drizzle-api
+npm run db:create    # Auto-creates database
+npm run db:generate  # Generates schema
+npm run db:push      # Pushes to database
+npm run dev
+```
+
 ## 📄 License
 
 MIT License - feel free to use this for personal or commercial projects!
@@ -503,6 +627,14 @@ MIT License - feel free to use this for personal or commercial projects!
 
 ## 🚀 Roadmap
 
+### Completed in v2.1.0 ✅
+
+- [x] Database ORM support (Prisma, Drizzle) with PostgreSQL
+- [x] Automatic database creation for Drizzle templates
+- [x] Database migration and schema management tools
+- [x] Database studio integration for visual database management
+- [x] Robust environment variable handling for database connections
+
 ### Completed in v2.0 ✅
 
 - [x] shadcn/ui setup for React and Next.js (configuration ready)
@@ -512,15 +644,16 @@ MIT License - feel free to use this for personal or commercial projects!
 
 ### Future Plans
 
+- [ ] Add more database options (MySQL, SQLite, MongoDB)
+- [ ] Add authentication templates (NextAuth, Clerk, Supabase Auth)
 - [ ] Add more UI libraries (Ant Design, Material UI, Chakra UI)
 - [ ] Add more backend frameworks (FastAPI, Express with TypeScript)
-- [ ] Add database setup options (Prisma, Drizzle)
 - [ ] Add CI/CD configuration files
-- [ ] Add Docker support
+- [ ] Add Docker support and configuration
 - [ ] Add testing framework setup (Jest, Vitest, Playwright)
 - [ ] Add more frontend frameworks (Svelte, Solid)
 - [ ] Add mobile frameworks (React Native, Flutter)
-- [ ] Add authentication templates (NextAuth, Clerk, Supabase Auth)
+- [ ] Add API documentation generation (Swagger/OpenAPI)
 
 ## 💡 Contributing
 

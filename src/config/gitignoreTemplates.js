@@ -44,6 +44,61 @@ out/
 .parcel-cache
 .turbo
 `,
+  'javascript-db': `
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# testing
+coverage/
+
+# production
+build/
+dist/
+
+# database
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# prisma
+prisma/migrations/*
+!prisma/migrations/.gitkeep
+
+# drizzle
+drizzle/*
+!drizzle/.gitkeep
+
+# misc
+.DS_Store
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.swp
+*.swo
+*~
+
+# next.js
+.next/
+out/
+
+# cache
+.cache
+.parcel-cache
+.turbo
+`,
   python: `
 # Byte-compiled / optimized / DLL files
 __pycache__/

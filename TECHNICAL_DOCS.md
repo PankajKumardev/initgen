@@ -24,11 +24,13 @@
 ### Key Features
 
 - Interactive CLI with beautiful animations
-- Support for 10+ tech stacks including shadcn/ui
+- Support for 12+ tech stacks including shadcn/ui and Database ORMs
+- Database ORM integration (Prisma, Drizzle) with PostgreSQL
 - Automatic dependency installation
 - TypeScript support
 - Git integration
 - Production-ready configurations
+- Database migration and schema management tools
 
 ---
 
@@ -206,6 +208,10 @@ Handles backend frameworks that require custom file generation:
 // Node.js + Express
 export async function createNodeExpressProject(projectName, useTypeScript, projectPath)
 
+// Database ORM Projects (v2.1.0+)
+export async function createNodePrismaProject(projectPath, projectName, useTypeScript)
+export async function createNodeDrizzleProject(projectPath, projectName, useTypeScript)
+
 // Python frameworks
 export async function createPythonFlaskProject(projectName, projectPath)
 export async function createPythonFastAPIProject(projectName, projectPath)
@@ -243,6 +249,14 @@ export const stackCommands = {
   'node-express': {
     name: 'Node.js + Express',
     manual: true, // Creates files manually via createNodeExpressProject()
+  },
+  'node-prisma': {
+    name: 'Node.js + Express + Prisma (PostgreSQL)',
+    manual: true, // Creates files manually via createNodePrismaProject()
+  },
+  'node-drizzle': {
+    name: 'Node.js + Express + Drizzle (PostgreSQL)',
+    manual: true, // Creates files manually via createNodeDrizzleProject()
   },
   // ... 3 more Python stacks (flask, fastapi, django)
 };
@@ -386,6 +400,41 @@ my-node-app/
 └── README.md
 ```
 
+#### **Node.js + Express + Prisma + TypeScript (v2.1.0+)**
+
+```
+my-prisma-app/
+├── src/
+│   └── index.ts
+├── prisma/
+│   └── schema.prisma
+├── package.json
+├── tsconfig.json
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
+#### **Node.js + Express + Drizzle + TypeScript (v2.1.0+)**
+
+```
+my-drizzle-app/
+├── src/
+│   ├── index.ts
+│   └── db/
+│       ├── index.ts          # Database connection with dotenv.config()
+│       ├── schema.ts         # Database schema definitions
+│       ├── create.ts         # Auto database creation script
+│       ├── migrate.ts        # Migration runner
+│       └── migrations/       # Generated migration files
+├── drizzle.config.js         # Drizzle configuration
+├── package.json
+├── tsconfig.json
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
 #### **Python + Flask**
 
 ```
@@ -404,26 +453,146 @@ my-flask-app/
 
 ```
 project-scaffold-cli/
-├── index.js                    # 335 lines - Main CLI entry point
+├── index.js                    # 439 lines - Main CLI entry point (updated v2.1.0)
 ├── package.json               # 6 dependencies + 2 devDependencies
-├── README.md                  # User-facing documentation
+├── README.md                  # User-facing documentation (updated v2.1.0)
+├── TECHNICAL_DOCS.md          # Technical documentation (updated v2.1.0)
 ├── LICENSE                    # MIT license
 ├── .npmignore                 # Excludes docs/, node_modules/
 └── src/
     ├── config/
-    │   ├── stackCommands.js       # 10 tech stacks configuration (40+ lines)
-    │   └── gitignoreTemplates.js  # JS + Python .gitignore templates (89 lines)
+    │   ├── stackCommands.js       # 12 tech stacks configuration (50+ lines, +2 DB stacks)
+    │   └── gitignoreTemplates.js  # JS + Python + DB .gitignore templates (95+ lines)
     ├── templates/
     │   ├── reactVite.js           # 214 lines - React + CSS styling
     │   ├── tailwind.js           # 146 lines - Tailwind v4 setup + vite config
     │   ├── shadcn.js             # 300+ lines - shadcn/ui setup + components
     │   ├── nextjs.js             # 350+ lines - Next.js + optional shadcn support
     │   ├── vue.js                # 239 lines - Vue 3 SFC with styling
-    │   └── manualProjects.js     # 468 lines - Node/Python project generators
+    │   └── manualProjects.js     # 1100+ lines - Node/Python/Database generators (+600 lines v2.1.0)
     └── utils/
-        ├── command.js            # 9 lines - Promisified child_process.exec
-        └── readme.js             # 67 lines - Dynamic README generation
+        ├── command.js            # 12 lines - Enhanced exec with timeout & buffer (v2.1.0)
+        └── readme.js             # 120+ lines - Dynamic README + Database docs (v2.1.0)
 ```
+
+---
+
+## 🗄️ Database ORM Integration (v2.1.0)
+
+### Supported Database ORMs
+
+#### **Prisma ORM**
+
+- **Auto-generated Prisma Client** with TypeScript support
+- **Database migration system** via `prisma migrate dev`
+- **Prisma Studio** for visual database management
+- **Schema-first approach** with commented examples
+- **PostgreSQL integration** with proper connection handling
+
+#### **Drizzle ORM**
+
+- **Lightweight ORM** with excellent TypeScript support
+- **Auto database creation** via custom `db:create` script
+- **Schema generation** and migration tools
+- **Drizzle Studio** for database visualization
+- **Robust environment loading** with `dotenv.config()` in database connection
+- **Zero-config Docker compatibility**
+
+### Database Project Features
+
+#### **Environment Variable Handling**
+
+```javascript
+// Fixed in v2.1.0: Environment variables now load properly in database connections
+import dotenv from 'dotenv';
+dotenv.config(); // Added to src/db/index.ts to fix DATABASE_URL undefined issues
+```
+
+#### **Drizzle Auto Database Creation**
+
+```javascript
+// New in v2.1.0: Automatic database creation script
+export async function createDatabase() {
+  const databaseUrl = process.env.DATABASE_URL;
+  const url = new URL(databaseUrl);
+  const dbName = url.pathname.slice(1);
+
+  // Connect to postgres database to create target database
+  const adminUrl = databaseUrl.replace(`/${dbName}`, '/postgres');
+  const adminClient = postgres(adminUrl);
+
+  // Check if database exists, create if not
+  const result =
+    await adminClient`SELECT 1 FROM pg_database WHERE datname = ${dbName}`;
+  if (result.length === 0) {
+    await adminClient.unsafe(`CREATE DATABASE "${dbName}"`);
+  }
+}
+```
+
+#### **Database Workflows**
+
+**Prisma Workflow:**
+
+```bash
+npm run db:migrate  # Run database migrations
+npm run db:generate # Generate Prisma client
+npm run db:studio   # Launch Prisma Studio
+```
+
+**Drizzle Workflow:**
+
+```bash
+npm run db:create   # Auto-create database (New in v2.1.0)
+npm run db:generate # Generate migration files
+npm run db:push     # Push schema to database
+npm run db:studio   # Launch Drizzle Studio
+npm run db:migrate  # Run existing migrations
+```
+
+### Database Template Architecture
+
+#### **Prisma Template Structure**
+
+- Simplified schema with commented examples (no opinionated User/Post models)
+- Basic Express server with health check endpoints
+- Automatic Prisma Client generation during setup
+- Environment-specific configuration
+
+#### **Drizzle Template Structure**
+
+- Modular database setup with separate connection, schema, and migration files
+- Auto database creation script for seamless Docker integration
+- Lightweight schema definitions with example comments
+- Enhanced error handling and environment variable loading
+
+### Key Technical Improvements (v2.1.0)
+
+#### **Fixed Environment Variable Loading**
+
+- **Problem**: `process.env.DATABASE_URL` was `undefined` causing "role Panka does not exist" errors
+- **Solution**: Added `dotenv.config()` to database connection files before URL access
+- **Impact**: Reliable database connections across all environments
+
+#### **Enhanced Command Buffer & Timeout**
+
+```javascript
+// Updated in command.js v2.1.0
+export async function runCommand(command, cwd) {
+  return execPromise(command, {
+    cwd,
+    maxBuffer: 1024 * 1024 * 50, // Increased to 50MB
+    timeout: 300000, // Added 5 minute timeout
+  });
+}
+```
+
+#### **Automatic Database Creation for Drizzle**
+
+- Eliminates need for manual `createdb` or PostgreSQL setup
+- Works seamlessly with Docker PostgreSQL containers
+- Matches Prisma's automatic database creation behavior
+- Provides better developer experience for database projects
 
 ---
 
