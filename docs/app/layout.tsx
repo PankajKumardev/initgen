@@ -4,17 +4,17 @@ import './globals.css';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
-  title: 'InitGen v2.0 Documentation',
+  title: 'InitGen',
   description:
     'Professional documentation for InitGen v2.0, the project bootstrap CLI with shadcn/ui setup and enhanced Next.js templates.',
   icons: {
     icon: '/favicon.ico',
   },
   openGraph: {
-    title: 'InitGen v2.0 Documentation',
+    title: 'InitGen',
     description:
       'Bootstrap modern projects with shadcn/ui setup, Tailwind v4 support, and enhanced templates. InitGen v2.0 CLI.',
-    url: 'https://initgen.dev',
+    url: 'https://initgen.pankajk.tech',
     siteName: 'InitGen',
     type: 'website',
   },
