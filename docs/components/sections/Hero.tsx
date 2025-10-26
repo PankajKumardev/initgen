@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 
 export default function Hero() {
   return (
-    <section className="container flex min-h-[80vh] flex-col items-center justify-center gap-6 py-24 text-center">
+    <section className="container flex min-h-screen  flex-col items-center justify-center gap-6 py-24 text-center">
       <div className="space-y-6">
         <div className="flex items-center justify-center gap-3 mb-2">
           <h1 className="text-5xl font-semibold tracking-tight sm:text-7xl text-blue-500">

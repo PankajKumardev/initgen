@@ -169,10 +169,10 @@ export default function DownloadsSection() {
     <section className="container mx-auto py-16">
       <div className="mx-auto max-w-4xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800 tracking-tight  mb-2">
             Download Statistics
           </h2>
-          <p className="text-lg text-muted-foreground mb-2">
+          <p className="text-base text-gray-700 mb-2">
             Join thousands of developers using InitGen CLI
           </p>
           <p className="text-sm text-gray-500">{downloadsMessage}</p>

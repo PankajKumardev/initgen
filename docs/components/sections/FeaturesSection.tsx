@@ -36,10 +36,10 @@ export default function FeaturesSection() {
     <section className="container mx-auto py-16">
       <div className="mx-auto max-w-4xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+          <h2 className="text-2xl font-semibold tracking-tight text-gray-800  mb-2">
             Features
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base text-gray-700">
             Everything you need to bootstrap modern projects
           </p>
         </div>
